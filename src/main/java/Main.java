@@ -13,7 +13,8 @@ public class Main {
     public static final String REMOTE_SERVICE_URI =
             "https://raw.githubusercontent.com/netology-code/jd-homeworks/master/http/task1/cats";
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
+        // создаём http клиент
         CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setConnectTimeout(5000)    // максимальное время ожидание подключения к серверу
@@ -27,10 +28,17 @@ public class Main {
         request.setHeader(HttpHeaders.ACCEPT, ContentType.APPLICATION_JSON.getMimeType());
 
         // получим ответ
-        CloseableHttpResponse response = httpClient.execute(request);
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(request);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        // читаем запрос, обрабатываем и выводим нужное
-        Parsing.getCat(response);
+        // обрабатываем ответ и выводим нужное
+        if (response != null) {
+            Parsing.getCat(response);
+        }
     }
 }
 

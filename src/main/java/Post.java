@@ -6,7 +6,31 @@ public class Post {
     private String text;
     private String type;
     private String user;
-    private int upvotes;
+    private Integer upvotes;
+
+    private Post(@JsonProperty("id") String id,
+                 @JsonProperty("text") String text,
+                 @JsonProperty("type") String type,
+                 @JsonProperty("user") String user,
+                 @JsonProperty("upvotes") Integer upvotes
+    ) {
+        this.id = id;
+        this.text = text;
+        this.type = type;
+        this.user = user;
+        this.upvotes = upvotes;
+    }
+
+    @Override
+    public String toString() {
+        return "Obj{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", type='" + type + '\'' +
+                ", user='" + user + '\'' +
+                ", upvotes=" + upvotes +
+                '}';
+    }
 
     public String getId() {
         return id;
@@ -40,35 +64,11 @@ public class Post {
         this.user = user;
     }
 
-    public void setUpvotes(int upvotes) {
-        this.upvotes = upvotes;
-    }
-
-    private Post(@JsonProperty("id") String id,
-                 @JsonProperty("text") String text,
-                 @JsonProperty("type") String type,
-                 @JsonProperty("user") String user,
-                 @JsonProperty("upvotes") int upvotes
-    ) {
-        this.id = id;
-        this.text = text;
-        this.type = type;
-        this.user = user;
-        this.upvotes = upvotes;
-    }
-
-    protected int getUpvotes() {
+    public Integer getUpvotes() {
         return upvotes;
     }
 
-    @Override
-    public String toString() {
-        return "Obj{" +
-                "id=" + id +
-                ", text='" + text + '\'' +
-                ", type='" + type + '\'' +
-                ", user='" + user + '\'' +
-                ", upvotes=" + upvotes +
-                '}';
+    public void setUpvotes(Integer upvotes) {
+        this.upvotes = upvotes;
     }
 }

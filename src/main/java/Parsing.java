@@ -14,9 +14,6 @@ public class Parsing {
 
     public static void getCat(CloseableHttpResponse response) {
 
-        // вывод полученных заголовков
-//        Arrays.stream(response.getAllHeaders()).forEach(System.out::println);
-
         // чтение тела ответа
         String body = null;
         try {
@@ -26,17 +23,12 @@ public class Parsing {
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        System.out.println(body);
-
-        // получим статус запроса
-//        System.out.println(response.getStatusLine());
 
         // код для преобразования json в java
         List<Post> posts = null;
         try {
             posts = mapper.readValue(body, new TypeReference<>() {
             });
-//            posts.forEach(System.out::println);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,32 +36,24 @@ public class Parsing {
         // фильтруем нужные значения
         List<Post> filterPost =
                 posts != null ? posts.stream()
+                        .filter(upvotes -> upvotes.getUpvotes() != null)
                         .filter(upvotes -> upvotes.getUpvotes() > 0)
                         .collect(Collectors.toList()) : null;
-//        if (filterPost != null) {
-//            filterPost.forEach(System.out::println);
-//        }
 
-//        // переведём List в строку
-        String resultJson = null;
+        // вывод на экран
         try {
-            resultJson = mapper.writeValueAsString(filterPost);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-//        // преобразуем строку в 'красивый' json
-        Object json = null;
-        try {
-            json = mapper.readValue(resultJson, Object.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        try {
+            String resultJson;
+            Object json = null;
+            if (filterPost != null) {
+                // преобразуем List в строку
+                resultJson = mapper.writeValueAsString(filterPost);
+                // преобразуем строку в json
+                json = mapper.readValue(resultJson, Object.class);
+            }
+            // сделаем 'красивый' вывод на экран
             System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
-
     }
 }
